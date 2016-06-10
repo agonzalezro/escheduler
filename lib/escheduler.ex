@@ -1,4 +1,5 @@
 defmodule Escheduler do
+  @moduledoc "Kubernetes scheduler that binds pods to random nodes."
   @name "escheduler"
 
   def main(_args) do
@@ -25,24 +26,24 @@ defmodule Escheduler do
     |> Enum.map(&(get_in(&1, ["metadata", "name"])))
   end
 
-  def bind(pod, node) do
+  def bind(pod_name, node_name) do
     url = "http://127.0.0.1:8001/api/v1/namespaces/default/pods/#{pod}/binding"
     payload = %{
       "apiVersion": "v1",
       "kind": "Binding",
       "metadata": %{
-        "name": pod,
+        "name": pod_name,
       },
       "target": %{
         "apiVersion": "v1",
         "kind": "Node",
-        "name": node,
+        "name": node_name,
       }
     }
     headers = [{'content-type', 'application/json'}]
 
     HTTPoison.post! url, payload |> Poison.encode!, headers
-    IO.puts "#{pod} pod scheduled in #{node}"
+    IO.puts "#{pod_name} pod scheduled in #{node_name}"
   end
 
   def schedule(pods) do

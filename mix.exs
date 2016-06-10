@@ -31,6 +31,7 @@ defmodule Escheduler.Mixfile do
     [
       {:poison, "~> 2.0"},
       {:httpoison, "~> 0.8.3"},
+      {:credo, "~> 0.4", only: [:dev, :test]},
     ]
   end
 end
